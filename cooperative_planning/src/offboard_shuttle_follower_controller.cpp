@@ -132,7 +132,7 @@ void executeCaptureManeuverCb(const std_msgs::Empty::ConstPtr& msg){
 
 void updateDesiredPosCb(const geometry_msgs::Point::ConstPtr& msg){
         //Enviar mensagem configuracao nova posicao
-        //rostopic pub /cooperative_planning/state_machine/shuttleController/desired_local_position geometry_msgs/Point  '{x: 10.0, y: 10.0, z: 10.0}'
+        //rostopic pub /cooperative_planning/state_machine/desired_local_position geometry_msgs/Point  '{x: 10.0, y: 10.0, z: 10.0}'
 
     desiredPosition.x = msg->x;
     desiredPosition.y = msg->y;
@@ -141,7 +141,7 @@ void updateDesiredPosCb(const geometry_msgs::Point::ConstPtr& msg){
 
 void updateDesiredVelCb(const geometry_msgs::Point::ConstPtr& msg){
         //Enviar mensagem configuracao nova velocidade
-        //rostopic pub /cooperative_planning/state_machine/shuttleController/desired_local_velocity geometry_msgs/Point  '{x: 10.0, y: 10.0, z: 10.0}'
+        //rostopic pub /cooperative_planning/state_machine/desired_local_velocity geometry_msgs/Point  '{x: 10.0, y: 10.0, z: 10.0}'
 
    
     desiredVelocityLinear.x = msg->x;
@@ -312,9 +312,9 @@ int main (int argc, char ** argv){
     double pos[3][1], vel[3][1];
 	double yaw, t0, t;
 
-    desiredPosition.x = 0.0;
+    desiredPosition.x = 5.0;
     desiredPosition.y = 0.0;
-    desiredPosition.z = -22.0;
+    desiredPosition.z = -3.0;
 
     pos[0][0]=desiredPosition.x; pos[1][0]=desiredPosition.y; pos[2][0]=desiredPosition.z;
     //pos[0][0]=0; pos[1][0]=0; pos[2][0]=-3;
@@ -340,7 +340,7 @@ int main (int argc, char ** argv){
         ROS_WARN_STREAM("Shuttle Current Velocity: " << shuttle->ekf.vel[0][0]  << "  " << shuttle->ekf.vel[1][0]  << "  " << shuttle->ekf.vel[2][0]);
         ROS_WARN_STREAM("Shuttle Desired Velocity: " << desiredVelocityLinear.x  << "  " << desiredVelocityLinear.y  << "  " << desiredVelocityLinear.z);
 
-        ROS_WARN_STREAM("Target Current Position: " << target->ekf.pos[0][0]  << "  " << target->ekf.pos[1][0]  << "  " << target->ekf.pos[2][0]);
+        ROS_WARN_STREAM("Target Current Position: " << target->ekf.pos[0][0] + referential_relative_to_shuttle_x  << "  " << target->ekf.pos[1][0] + referential_relative_to_shuttle_y << "  " << target->ekf.pos[2][0] + referential_relative_to_shuttle_z );
 
 
         desiredPosReached(reached_pos_pub);
@@ -370,7 +370,6 @@ int main (int argc, char ** argv){
         //shuttle->set_pos_yaw(pos, yaw, 0.01);
         
        
-
 
 
 
